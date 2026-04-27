@@ -5,8 +5,6 @@ import os
 HOMEPATH = os.path.dirname(os.path.realpath(__file__))
 sys.stderr = open(f'{HOMEPATH}/errors.txt', "a")
 
-sys
-
 try:
     SAVED_OPTIONS = open(f'{HOMEPATH}/.opts').read()
 except:
@@ -59,6 +57,7 @@ def main():
         saved_options = ", ".join([f'--{option}' for option in OPTIONS if option[0] in SAVED_OPTIONS])
         search = input(f"\nSaved options: {saved_options}\nSearch for:\n")
 
+    # resolving full-name --option_name
     full_name_options = ''
     while '--' in search:
         end_pos = search.find('--') + 2
@@ -68,17 +67,27 @@ def main():
         search = search[:search.find('--')] + search[search.find('--') + 2 + len(option):]
         full_name_options += option[0]
 
-    options = ''
-    opt_pos = search.rfind('-')
-    if 2 <= opt_pos and search[opt_pos - 1] == ' ':
-        options = search[opt_pos + 1:]
-        search  = search[:opt_pos - 1]
+    # resolving short-name -options (e|r|t|i|k)
+    short_options = ''
+    while ' -' in search:
+        end_pos = search.find(' -') + 2
+        while (end_pos < len(search) and search[end_pos] != ' '):
+            end_pos += 1
+        option = search[search.find(' -') + 2:end_pos]
+        search = search[:search.find(' -')] + search[search.find(' -') + 2 + len(option):]
+        short_options += option
 
-    else:
-        if not full_name_options:
-            options = SAVED_OPTIONS
+    if search[0] == '-':
+        end_pos = 1
+        while (end_pos < len(search) and search[end_pos] != ' '):
+            end_pos += 1
+        option = search[1 : end_pos]
+        search = search[1 + len(option):]
+        short_options += option
 
-    options += full_name_options
+    options = short_options + full_name_options
+    if not options:
+        options = SAVED_OPTIONS
     if 'e' not in options and 'r' not in options and 't' not in options:
         options += 'e'
 
@@ -86,8 +95,9 @@ def main():
     if debug:
         print(f"Args:        {sys.argv}")
         print(f"Search:      {search}")
-        print(f"All options: {options}")
+        print(f"Short-name:  {short_options}")
         print(f"Full-name:   {full_name_options}")
+        print(f"All options: {options}")
         return
 
     dicts  = []
