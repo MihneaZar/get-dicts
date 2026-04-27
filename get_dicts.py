@@ -24,9 +24,9 @@ e   (--e[nglish]): search in english dictionaries (default).
 r  (--r[omanian]): search in romanian dictionaries.
 t (--t[ranslate]): translate (reverso -> will choose language based on query words).
 i (--i[ncognito]): search in incognito.
-k      (--k[eep]): keep previous search options.
+s      (--s[ave]): save current search options.
 
-Last used options will be reused if none are provided."""
+Last saved options (or '-e') will be reused if none are provided."""
 
 ENGLISH = [
     "https://www.thesaurus.com/browse/{query}",
@@ -112,7 +112,8 @@ def main():
     else:
         print("Empty search query, skipping links.")
 
-    if 'k' not in options:
+    if 's' in options:
+        print("Saved search options.")
         open(f'{HOMEPATH}/.opts', 'w').write(options)
 
 if __name__ == "__main__":
