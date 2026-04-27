@@ -3,6 +3,9 @@ import sys
 import os
 
 HOMEPATH = os.path.dirname(os.path.realpath(__file__))
+sys.stderr = open(f'{HOMEPATH}/errors.txt', "a")
+
+sys
 
 try:
     SAVED_OPTIONS = open(f'{HOMEPATH}/.opts').read()
@@ -94,9 +97,8 @@ def main():
 
     chrome_arg = '-incognito' if 'i' in options else ''
     if search and not search.isspace():
-        for link in dicts:
-            link = link.replace("{query}", search)
-            subprocess.Popen(f'start chrome {chrome_arg} /new-tab \"{link}\"', shell=True)
+        dicts = " ".join([f'"{link.replace("{query}", search)}"' for link in dicts])
+        subprocess.Popen(f'start chrome {chrome_arg} /new-window {dicts}', shell=True)
     else:
         print("Empty search query, skipping links.")
 
