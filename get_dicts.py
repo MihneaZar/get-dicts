@@ -65,7 +65,7 @@ def main():
             end_pos += 1
         option = search[search.find('--') + 2:end_pos]
         search = search[:search.find('--')] + search[search.find('--') + 2 + len(option):]
-        full_name_options += option[0]
+        full_name_options += option[0] if option else ''
 
     # resolving short-name -options (e|r|t|i|k)
     short_options = ''
