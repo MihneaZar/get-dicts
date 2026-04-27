@@ -77,7 +77,7 @@ def main():
         search = search[:search.find(' -')] + search[search.find(' -') + 2 + len(option):]
         short_options += option
 
-    if search[0] == '-':
+    if search and search[0] == '-':
         end_pos = 1
         while (end_pos < len(search) and search[end_pos] != ' '):
             end_pos += 1
@@ -109,12 +109,13 @@ def main():
     if search and not search.isspace():
         dicts = " ".join([f'"{link.replace("{query}", search)}"' for link in dicts])
         subprocess.Popen(f'start chrome {chrome_arg} /new-window {dicts}', shell=True)
+        print()
     else:
-        print("Empty search query, skipping links.")
+        print("\nEmpty search query, skipping links.")
 
     if 's' in options:
         print("Saved search options.")
-        open(f'{HOMEPATH}/.opts', 'w').write(options)
+        open(f'{HOMEPATH}/.opts', 'w').write("".join([option[0] for option in OPTIONS if option[0] in options]))
 
 if __name__ == "__main__":
     main()
