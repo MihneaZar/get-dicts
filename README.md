@@ -16,6 +16,6 @@ The options are:
 - r  (--r[omanian]): search in romanian dictionaries.
 - t (--t[ranslate]): translate (reverso -> will choose language based on query words).
 - i (--i[ncognito]): search in incognito.
-- a      (--s[ave]): save current search options.
+- s      (--s[ave]): save current search options.
 
 Last used options will be reused if none are provided.
