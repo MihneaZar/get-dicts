@@ -19,3 +19,7 @@ The options are:
 - s      (--s[ave]): save current search options.
 
 Last used options will be reused if none are provided.
+
+-------------------------------------------------------------------------
+
+*Copyright (c) 2026 Mihnea Bogdan Zarojanu*
