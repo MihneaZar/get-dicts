@@ -42,6 +42,8 @@ REVERSO = "https://context.reverso.net/traducere/engleza-romana/{query}"
 OPTIONS = ["english", "romanian", "translate", "incognito"]
 
 def main():
+    os.system('title Dictionaries')
+
     debug = ('-d' in sys.argv or '--debug' in sys.argv)
     help  = ('-h' in sys.argv or '--help' in sys.argv)
 
