@@ -5,6 +5,7 @@ Menu for choosing online dictionaries and opening them with a search query.
 
 ## Requirements 
 - The [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) for the MenuInterface class;
+- The [PyYAML](https://pypi.org/project/PyYAML/) library for the main menu.
 
 ## Help Page
 Command-line arguments:
