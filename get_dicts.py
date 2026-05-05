@@ -40,7 +40,6 @@ def main():
     menu_structure[title][QUIT_RUNNING] = None
     menu_structure[title]["Exit"] = None
 
-    # print(json.dumps(menu_structure, indent=4))
     menu = MenuInterface(menu_structure)
 
     while True:
@@ -67,6 +66,7 @@ def main():
             chrome_arg = " ".join(args)
 
             if not search or search.isspace():
+                menu.exitInterface()
                 continue
 
             dicts = " ".join([dict.replace("{query}", search) for dict in dicts])
