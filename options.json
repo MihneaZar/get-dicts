@@ -1,7 +1,7 @@
 {
     "_comment #1": "You can 'comment out' options by adding an underscore at the beginning, so you don't have to remove them completely. Entries that are 'commented' are ignored by the 'get_dicts.py' program.",
-    "_comment #3": "For URL entries, add them as a list of links, with '{query}' where the search query should go in the URL (search something on the dictionary/translator to see where the your search words are).",
-    "_comment #5": "For 'chrome' command-line args, add them as a string entry. This is the entire list of possible args: https://peter.sh/experiments/chromium-command-line-switches/.",
+    "_comment #2": "For URL entries, add them as a list of links, with '{query}' where the search query should go in the URL (search something on the dictionary/translator to see where the your search words are).",
+    "_comment #3": "For 'chrome' command-line args, add them as a string entry. This is the entire list of possible args: https://peter.sh/experiments/chromium-command-line-switches/.",
 
     "english": ["https://www.thesaurus.com/browse/{query}", "https://www.merriam-webster.com/thesaurus/{query}", "https://www.wordhippo.com/what-is/another-word-for/{query}.html"],
     "romanian": ["https://dexonline.ro/definitie/{query}", "https://www.dictionardesinonime.ro/?c={query}"],
