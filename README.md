@@ -1,3 +1,5 @@
+# Menu Version
+
 ## Description
 Script that opens online dictionaries based on given arguments. <br>
 Especially useful when saved as a console command or with a hotkey (using [AutoHotkey](https://www.autohotkey.com/) or a similar tool).
