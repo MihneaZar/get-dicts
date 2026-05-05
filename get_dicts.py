@@ -10,6 +10,13 @@ DATAPATH = f"{HOMEPATH}/data"
 sys.stderr = open(f'{DATAPATH}/errors.txt', "a")
 
 
+if not os.path.exists(f"{HOMEPATH}/options.json"):
+    os.replace(f"{HOMEPATH}/options_setup.json", f"{DATAPATH}/options.json")
+
+if not os.path.exists(f"{DATAPATH}/selected.json"):
+    os.replace(f"{DATAPATH}/selected_setup.json", f"{DATAPATH}/selected.json")
+
+
 KEEP_RUNNING = "Keep running after search"
 QUIT_RUNNING = "Stop running after search"
 
