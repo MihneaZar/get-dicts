@@ -3,7 +3,8 @@ import sys
 import os
 
 HOMEPATH = os.path.dirname(os.path.realpath(__file__))
-sys.stderr = open(f'{HOMEPATH}/errors.txt', "a")
+DATAPATH = f"{HOMEPATH}/data"
+sys.stderr = open(f'{DATAPATH}/errors.txt', "a")
 
 try:
     SAVED_OPTIONS = open(f'{HOMEPATH}/.opts').read()
