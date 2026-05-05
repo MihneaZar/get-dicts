@@ -1,4 +1,7 @@
+from ConsoleListInterface import MenuInterface
 import subprocess
+import yaml
+import json
 import sys
 import os
 
@@ -6,44 +9,108 @@ HOMEPATH = os.path.dirname(os.path.realpath(__file__))
 DATAPATH = f"{HOMEPATH}/data"
 sys.stderr = open(f'{DATAPATH}/errors.txt', "a")
 
-try:
-    SAVED_OPTIONS = open(f'{HOMEPATH}/.opts').read()
-except:
-    SAVED_OPTIONS = 'e'
 
-HELP = """Command-line arguments:
-'-h' or  '--help': print this help page.
-'-d' or '--debug': print debug info without opening links or saving options.
-"""
-
-EXPLAIN = """Search in english/romanian dictionaries.
-Syntax: '{search query} [-options] [--option_name[ --option_name]]'.
-Search query can have spaces.
-
-The options are: 
-e   (--e[nglish]): search in english dictionaries (default).
-r  (--r[omanian]): search in romanian dictionaries.
-t (--t[ranslate]): translate (reverso -> will choose language based on query words).
-i (--i[ncognito]): search in incognito.
-s      (--s[ave]): save current search options.
-
-Last saved options (or '-e') will be reused if none are provided."""
-
-ENGLISH = [
-    "https://www.thesaurus.com/browse/{query}",
-    "https://www.merriam-webster.com/thesaurus/{query}",
-    "https://www.wordhippo.com/what-is/another-word-for/{query}.html"
-]
-ROMANIAN = [
-    "https://dexonline.ro/definitie/{query}", 
-    "https://www.dictionardesinonime.ro/?c={query}"
-]
-REVERSO = "https://context.reverso.net/traducere/engleza-romana/{query}"
-
-OPTIONS = ["english", "romanian", "translate", "incognito"]
+KEEP_RUNNING = "Keep running after search"
+QUIT_RUNNING = "Stop running after search"
 
 def main():
     os.system('title Dictionaries')
+
+    menu_structure = yaml.safe_load(open(f"{DATAPATH}/main_menu.yaml"))
+    title = next(iter(menu_structure))
+
+    full_options = json.load(open(f"{HOMEPATH}/options.json"))
+    options = [option for option in full_options if option and option[0] != '_']
+    selected_options = json.load(open(f"{DATAPATH}/selected.json"))
+
+    max_option = max([len(option) for option in options])
+
+    for option in options:
+        selected_text = f"{'x':>{max_option - len(option) + 2}}" if option in selected_options else ""
+        menu_structure[title][f"'{option}'{selected_text}"] = None
+
+    exit_on_search = True
+    menu_structure[title][QUIT_RUNNING] = None
+    menu_structure[title]["Exit"] = None
+
+    # print(json.dumps(menu_structure, indent=4))
+    menu = MenuInterface(menu_structure)
+
+    while True:
+        path = menu.interactWithMenu()
+
+        # ignoring backspace
+        if not path:
+            continue
+
+        path = path[0]
+
+        if path == "Search":
+            # search(links, args)
+            dicts = []
+            args  = []
+
+            for option in selected_options:
+                if isinstance(full_options[option], list):
+                    dicts += full_options[option]
+                else:
+                    args.append(full_options[option])
+
+            search     = menu.separateInteraction(function=lambda: input("Search for: "), showCursor=True)
+            chrome_arg = " ".join(args)
+
+            if not search or search.isspace():
+                continue
+
+            dicts = " ".join([dict.replace("{query}", search) for dict in dicts])
+
+            subprocess.Popen(f'start chrome {chrome_arg} {dicts}', shell=True)
+
+            if exit_on_search:    
+                return
+            
+            continue
+        
+        if path == "Save selection":
+            with open(f"{DATAPATH}/selected.json", 'w', encoding="utf-8") as file:
+                json.dump(selected_options, file, ensure_ascii=False, indent=4)
+
+            menu.separateInteraction(message="Selection saved.\n")
+            continue
+
+
+        if path[0] == "'":
+            new_option = path[1:path.find("'", 1)]
+
+            changes = MenuInterface.selectMultipleOptions([f"'{option}'" for option in selected_options], f"'{new_option}'", [f"'{option}'" for option in options], 'x')
+            
+            # selecting option
+            if new_option not in selected_options:
+                selected_options.append(new_option)
+            # deselecting option
+            else:
+                selected_options.remove(new_option)
+
+            menu.changeOptionNames([], changes)
+            continue
+
+
+        if path in [KEEP_RUNNING, QUIT_RUNNING]:
+            changes = {}
+            if path == KEEP_RUNNING:
+                changes[KEEP_RUNNING] = QUIT_RUNNING
+            else:
+                changes[QUIT_RUNNING] = KEEP_RUNNING
+            
+            exit_on_search = not exit_on_search
+            menu.changeOptionNames([], changes)
+            
+
+        if path == "Exit":
+            menu.exitInterface()
+            return
+
+    return
 
     debug = ('-d' in sys.argv or '--debug' in sys.argv)
     help  = ('-h' in sys.argv or '--help' in sys.argv)
