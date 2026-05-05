@@ -20,12 +20,12 @@ In the menu, the following options will be listed:
 ## Adding Dictionaries and Chrome Options
 In the 'options.json' file, additional dictionary URLs and chrome command-line arguments can be added. <br>
 For dict URLs, a list of dictionary links needs to be provided, with the '{query}' string in the place where the search query should be. <br>
-For chrome args, a string with the chrome argument should be added (the entire list of arguments is [here](https://peter.sh/experiments/chromium-command-line-switches/). <br>
-A few examples are already present, for a few English dictionaries, a few Romanian ones, and the [Reverso](https://context.reverso.net/traducere/engleza-romana/) English-Romanian translator, along with the '-incognito' and '/new_window' chrome options.
+For chrome arguments, a string with the chrome argument should be added (the entire list of arguments is [here](https://peter.sh/experiments/chromium-command-line-switches/)). <br>
+A few examples are already present, for a few English dictionaries, a few Romanian ones, and the [Reverso](https://context.reverso.net/traducere/engleza-romana/) English-Romanian translator, along with the '-incognito' and '/new_window' chrome options.<br>
 
 A few notes:
 - the order of the entries in the 'options.json' determines both their order in the menu, but also the order in which the links are opened;
-- as is shown in the '_comments', entries can be removed from the menu by adding an '_' to the beginning of their name, without having to actually delete them;
+- as is shown in the '\_comments', entries can be removed from the menu by adding an '\_' at the beginning of their name, without having to actually delete them;
 - multiple chrome options can be added in the same entry simply by adding them with spaces in between.
 
 -------------------------------------------------------------------------
