@@ -62,11 +62,10 @@ def main():
                 else:
                     args.append(full_options[option])
 
-            search     = menu.separateInteraction(function=lambda: input("Search for: "), showCursor=True)
+            search = menu.separateInteraction(function=lambda: input("Search for: "), showCursor=True).replace(' ', '+')
             chrome_arg = " ".join(args)
 
             if not search or search.isspace():
-                menu.exitInterface()
                 continue
 
             dicts = " ".join([dict.replace("{query}", search) for dict in dicts])
@@ -74,6 +73,7 @@ def main():
             subprocess.Popen(f'start chrome {chrome_arg} {dicts}', shell=True)
 
             if exit_on_search:    
+                menu.exitInterface()
                 return
             
             continue
