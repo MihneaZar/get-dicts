@@ -24,7 +24,6 @@ def main():
     os.system('title Dictionaries')
 
     menu_structure = yaml.safe_load(open(f"{DATAPATH}/main_menu.yaml"))
-    title = next(iter(menu_structure))
 
     full_options = json.load(open(f"{HOMEPATH}/options.json"))
     options = [option for option in full_options if option and option[0] != '_']
@@ -32,15 +31,17 @@ def main():
 
     max_option = max([len(option) for option in options])
 
+    option_dict = {}
     for option in options:
         selected_text = f"{'x':>{max_option - len(option) + 2}}" if option in selected_options else ""
-        menu_structure[title][f"'{option}'{selected_text}"] = None
+        option_dict[f"'{option}'{selected_text}"] = None
 
     exit_on_search = True
-    menu_structure[title][QUIT_RUNNING] = None
-    menu_structure[title]["Exit"] = None
 
-    menu = MenuInterface(menu_structure)
+    menu = MenuInterface(menu_structure, dontPrintMenu=True)
+
+    menu.addOptions([], option_dict, "options")
+    menu.removeOptions([], ["options"])
 
     while True:
         path = menu.interactWithMenu()
