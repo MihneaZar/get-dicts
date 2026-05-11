@@ -21,6 +21,31 @@ KEEP_RUNNING = "Keep running after search"
 QUIT_RUNNING = "Stop running after search"
 
 def main():
+    # direct search from command-line
+    if '-s' in sys.argv or '--search' in sys.argv:
+        full_options = json.load(open(f"{HOMEPATH}/options.json"))
+        selected_options = json.load(open(f"{DATAPATH}/selected.json"))
+        dicts = []
+        args  = []
+
+        for option in selected_options:
+            if isinstance(full_options[option], list):
+                dicts += full_options[option]
+            else:
+                args.append(full_options[option])
+
+        search = input("Search for: ").replace(' ', '+')
+        chrome_arg = " ".join(args)
+
+        if not search or search.isspace():
+            return
+
+        dicts = " ".join([dict.replace("{query}", search) for dict in dicts])
+
+        subprocess.Popen(f'start chrome {chrome_arg} {dicts}', shell=True)
+        
+        return
+
     os.system('title Dictionaries')
 
     menu_structure = yaml.safe_load(open(f"{DATAPATH}/main_menu.yaml"))

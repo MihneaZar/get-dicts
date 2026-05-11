@@ -28,6 +28,9 @@ A few notes:
 - as is shown in the '\_comments', entries can be removed from the menu by adding an '\_' at the beginning of their name, without having to actually delete them;
 - multiple chrome options can be added in the same entry simply by adding them with spaces in between.
 
+## Direct Search from Command-Line
+Adding '--search' or '-s' as a command-line argument will directly prompt the search query, open dictionaries according to currently-saved selection, then quit.
+
 -------------------------------------------------------------------------
 
 *Copyright (c) 2026 Mihnea Bogdan Zarojanu*
