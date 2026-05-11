@@ -29,7 +29,8 @@ A few notes:
 - multiple chrome options can be added in the same entry simply by adding them with spaces in between.
 
 ## Direct Search from Command-Line
-Adding '--search' or '-s' as a command-line argument will directly prompt the search query, open dictionaries according to currently-saved selection, then quit.
+Adding '--search' or '-s' as a command-line argument will directly prompt the search query, open dictionaries according to currently-saved selection, then quit. <br>
+On top of that, the arguments '--clear' or '-c' will clear the screen and prompt the direct search query at the same position as the menu option does. 
 
 -------------------------------------------------------------------------
 

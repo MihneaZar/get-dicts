@@ -1,4 +1,4 @@
-from ConsoleListInterface import MenuInterface
+from ConsoleListInterface import MenuInterface, moveCursor, cls
 import subprocess
 import yaml
 import json
@@ -23,8 +23,15 @@ QUIT_RUNNING = "Stop running after search"
 def main():
     # direct search from command-line
     if '-s' in sys.argv or '--search' in sys.argv:
+        clear = ('-c' in sys.argv or '--clear' in sys.argv)
+        
+        if clear:
+            cls()
+            moveCursor(max(int(os.get_terminal_size()[1] / 2) - 4, 0), 0)
+        
         full_options = json.load(open(f"{HOMEPATH}/options.json"))
         selected_options = json.load(open(f"{DATAPATH}/selected.json"))
+        
         dicts = []
         args  = []
 
@@ -35,7 +42,11 @@ def main():
             else:
                 args.append(full_options[option])
 
+        if not clear:
+            print()
         search = input("Search for: ").replace(' ', '+')
+        print()
+
         chrome_arg = " ".join(args)
 
         if not search or search.isspace():
