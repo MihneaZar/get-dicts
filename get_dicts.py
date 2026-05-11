@@ -28,7 +28,8 @@ def main():
         dicts = []
         args  = []
 
-        for option in selected_options:
+        # respecting order from HOMEPATH/options.json
+        for option in [option for option in full_options if option in selected_options]:
             if isinstance(full_options[option], list):
                 dicts += full_options[option]
             else:
@@ -82,7 +83,8 @@ def main():
             dicts = []
             args  = []
 
-            for option in selected_options:
+            # respecting order from HOMEPATH/options.json
+            for option in [option for option in full_options if option in selected_options]:
                 if isinstance(full_options[option], list):
                     dicts += full_options[option]
                 else:
