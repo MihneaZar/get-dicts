@@ -44,6 +44,7 @@ def main():
 
         if not clear:
             print()
+        print(f'Selected options: {", ".join([option for option in full_options if option in selected_options])}.\n')
         search = input("Search for: ").replace(' ', '+')
         print()
 
@@ -101,7 +102,7 @@ def main():
                 else:
                     args.append(full_options[option])
 
-            search = menu.separateInteraction(function=lambda: input("Search for: "), showCursor=True).replace(' ', '+')
+            search = menu.separateInteraction(function=lambda: input(f'Selected options: {", ".join([option for option in full_options if option in selected_options])}.\n\nSearch for: '), showCursor=True).replace(' ', '+')
             chrome_arg = " ".join(args)
 
             if not search or search.isspace():
