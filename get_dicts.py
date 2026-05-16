@@ -1,4 +1,5 @@
 from ConsoleListInterface import MenuInterface, moveCursor, cls
+from readchar import key
 import subprocess
 import yaml
 import json
@@ -84,7 +85,7 @@ def main():
     while True:
         path = menu.interactWithMenu()
 
-        # ignoring backspace
+        # ignoring backspace to main menu
         if not path:
             continue
 
@@ -122,7 +123,7 @@ def main():
             with open(f"{DATAPATH}/selected.json", 'w', encoding="utf-8") as file:
                 json.dump(selected_options, file, ensure_ascii=False, indent=4)
 
-            menu.separateInteraction(message="Selection saved.\n")
+            menu.separateInteraction(message="Selection saved.\n", waitInsteadOfEnter=0.5)
             continue
 
 
@@ -153,7 +154,7 @@ def main():
             menu.changeOptionNames([], changes)
             
 
-        if path == "Exit":
+        if path in ["Exit", key.ESC, key.BACKSPACE]:
             menu.exitInterface()
             return
 
