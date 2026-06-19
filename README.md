@@ -5,7 +5,7 @@ Menu for choosing online dictionaries and opening them with a search query.
 
 ## Requirements 
 - The [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) for the MenuInterface class;
-- The [PyYAML](https://pypi.org/project/PyYAML/) library for the main menu structure.
+- The [PyYAML](https://pypi.org/project/PyYAML/) library for the main menu structure and the list of dictionary options.
 
 
 ## Dictionaries Menu
@@ -18,8 +18,8 @@ In the menu, the following options will be listed:
 
 
 ## Adding Dictionaries and Chrome Options
-In the 'options.json' file, additional dictionary URLs and chrome command-line arguments can be added. <br>
-For dict URLs, a list of dictionary links needs to be provided, with the '{query}' string in the place where the search query should be. <br>
+In the 'options.yaml' file, additional dictionary URLs and chrome command-line arguments can be added. <br>
+For dict URLs, a list of dictionary links needs to be provided (in YAML, entries starting with '- '), with the '{query}' string in the place where the search query should be. <br>
 For chrome arguments, a string with the chrome argument should be added (the entire list of arguments is [here](https://peter.sh/experiments/chromium-command-line-switches/)). <br>
 A few examples are already present, with an entry for three English dictionaries, an entry for two Romanian ones, an entry for the [Reverso](https://context.reverso.net/traducere/engleza-romana/) English-Romanian translator, and one entry each for the '-incognito' and the '/new_window' chrome options.<br>
 
