@@ -1,0 +1,21 @@
+# These are the default dictionary entries, which also serve as an example.
+# For dictionaries themselves, add them as a list of entries (even if it's only one).
+# Add the '{query}' where the search words go (try searching something and see where it is in the link).
+# For Chrome-specific arguments, simply add them as {name: argument}.
+# This is the entire list of Chrome options: https://peter.sh/experiments/chromium-command-line-switches/. 
+
+english:
+    - "https://www.thesaurus.com/browse/{query}"
+    - "https://www.merriam-webster.com/thesaurus/{query}"
+    - "https://www.wordhippo.com/what-is/another-word-for/{query}.html"
+
+romanian:
+    - "https://dexonline.ro/definitie/{query}"
+    - "https://www.dictionardesinonime.ro/?c={query}"
+
+translate:
+    - "https://context.reverso.net/traducere/engleza-romana/{query}"
+
+incognito: "-incognito"
+
+new-window: "/new-window"

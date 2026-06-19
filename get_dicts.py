@@ -11,8 +11,8 @@ DATAPATH = f"{HOMEPATH}/data"
 sys.stderr = open(f'{DATAPATH}/errors.txt', "a")
 
 
-if not os.path.exists(f"{HOMEPATH}/options.json"):
-    os.replace(f"{HOMEPATH}/options_setup.json", f"{HOMEPATH}/options.json")
+if not os.path.exists(f"{HOMEPATH}/options.yaml"):
+    os.replace(f"{DATAPATH}/options_setup.yaml", f"{HOMEPATH}/options.yaml")
 
 if not os.path.exists(f"{DATAPATH}/selected.json"):
     os.replace(f"{DATAPATH}/selected_setup.json", f"{DATAPATH}/selected.json")
@@ -30,13 +30,13 @@ def main():
             cls()
             moveCursor(max(int(os.get_terminal_size()[1] / 2) - 4, 0), 0)
         
-        full_options = json.load(open(f"{HOMEPATH}/options.json"))
+        full_options = yaml.safe_load(open(f"{HOMEPATH}/options.yaml"))
         selected_options = json.load(open(f"{DATAPATH}/selected.json"))
         
         dicts = []
         args  = []
 
-        # respecting order from HOMEPATH/options.json
+        # respecting order from HOMEPATH/options.yaml
         for option in [option for option in full_options if option in selected_options]:
             if isinstance(full_options[option], list):
                 dicts += full_options[option]
@@ -64,7 +64,7 @@ def main():
 
     menu_structure = yaml.safe_load(open(f"{DATAPATH}/main_menu.yaml"))
 
-    full_options = json.load(open(f"{HOMEPATH}/options.json"))
+    full_options = yaml.safe_load(open(f"{HOMEPATH}/options.yaml"))
     options = [option for option in full_options if option and option[0] != '_']
     selected_options = json.load(open(f"{DATAPATH}/selected.json"))
 
@@ -96,7 +96,7 @@ def main():
             dicts = []
             args  = []
 
-            # respecting order from HOMEPATH/options.json
+            # respecting order from HOMEPATH/options.yaml
             for option in [option for option in full_options if option in selected_options]:
                 if isinstance(full_options[option], list):
                     dicts += full_options[option]
