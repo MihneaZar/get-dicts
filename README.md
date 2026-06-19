@@ -1,7 +1,8 @@
 # Menu Version
 
 ## Description
-Menu for choosing online dictionaries and opening them with a search query.
+Menu for choosing online dictionaries and opening them with a search query. <br>
+This is the version which uses the JSON format for the dictionary entries.
 
 ## Requirements 
 - The [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) for the MenuInterface class;
