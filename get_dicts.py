@@ -1,4 +1,5 @@
 from ConsoleListInterface import MenuInterface, moveCursor, cls
+from termcolor import colored
 from readchar import key
 import subprocess
 import yaml
@@ -45,8 +46,8 @@ def main():
 
         if not clear:
             print()
-        print(f'Selected options: {", ".join([option for option in full_options if option in selected_options])}.\n')
-        search = input("Search for: ").replace(' ', '+')
+        print(f'{colored("Selected options", "light_blue")}: {", ".join([option for option in full_options if option in selected_options])}.\n')
+        search = input(f'{colored("Search for", "light_blue")}: ').replace(' ', '+')
         print()
 
         chrome_arg = " ".join(args)
@@ -103,7 +104,7 @@ def main():
                 else:
                     args.append(full_options[option])
 
-            search = menu.separateInteraction(function=lambda: input(f'Selected options: {", ".join([option for option in full_options if option in selected_options])}.\n\nSearch for: '), showCursor=True).replace(' ', '+')
+            search = menu.separateInteraction(function=lambda: input(f'{colored("Selected options", "light_blue")}: {", ".join([option for option in full_options if option in selected_options])}.\n\n{colored("Search for", "light_blue")}: '), showCursor=True).replace(' ', '+')
             chrome_arg = " ".join(args)
 
             if not search or search.isspace():
@@ -123,7 +124,7 @@ def main():
             with open(f"{DATAPATH}/selected.json", 'w', encoding="utf-8") as file:
                 json.dump(selected_options, file, ensure_ascii=False, indent=4)
 
-            menu.separateInteraction(message="Selection saved.\n", waitInsteadOfEnter=0.5)
+            menu.separateInteraction(message=colored("Selection saved.\n", "light_blue"), waitInsteadOfEnter=0.5)
             continue
 
 
@@ -158,82 +159,6 @@ def main():
             menu.exitInterface()
             return
 
-    return
-
-    debug = ('-d' in sys.argv or '--debug' in sys.argv)
-    help  = ('-h' in sys.argv or '--help' in sys.argv)
-
-    if help: 
-        print(HELP)
-        print(EXPLAIN)
-        return
-
-    if not debug and 2 <= len(sys.argv):
-        search = " ".join(sys.argv[1:])
-    else:
-        print(EXPLAIN)
-        saved_options = ", ".join([f'--{option}' for option in OPTIONS if option[0] in SAVED_OPTIONS])
-        search = input(f"\nSaved options: {saved_options}\nSearch for:\n")
-
-    # resolving full-name --option_name
-    full_name_options = ''
-    while '--' in search:
-        end_pos = search.find('--') + 2
-        while (end_pos < len(search) and search[end_pos] != ' '):
-            end_pos += 1
-        option = search[search.find('--') + 2:end_pos]
-        search = search[:search.find('--')] + search[search.find('--') + 2 + len(option):]
-        full_name_options += option[0] if option else ''
-
-    # resolving short-name -options (e|r|t|i|k)
-    short_options = ''
-    while ' -' in search:
-        end_pos = search.find(' -') + 2
-        while (end_pos < len(search) and search[end_pos] != ' '):
-            end_pos += 1
-        option = search[search.find(' -') + 2:end_pos]
-        search = search[:search.find(' -')] + search[search.find(' -') + 2 + len(option):]
-        short_options += option
-
-    if search and search[0] == '-':
-        end_pos = 1
-        while (end_pos < len(search) and search[end_pos] != ' '):
-            end_pos += 1
-        option = search[1 : end_pos]
-        search = search[1 + len(option):]
-        short_options += option
-
-    options = short_options + full_name_options
-    if not options:
-        options = SAVED_OPTIONS
-    if 'e' not in options and 'r' not in options and 't' not in options:
-        options += 'e'
-
-    # debug
-    if debug:
-        print(f"Args:        {sys.argv}")
-        print(f"Search:      {search}")
-        print(f"Short-name:  {short_options}")
-        print(f"Full-name:   {full_name_options}")
-        print(f"All options: {options}")
-        return
-
-    dicts  = []
-    dicts += ENGLISH   if 'e' in options else []
-    dicts += ROMANIAN  if 'r' in options else []
-    dicts += [REVERSO] if 't' in options else []
-
-    chrome_arg = '-incognito' if 'i' in options else ''
-    if search and not search.isspace():
-        dicts = " ".join([f'"{link.replace("{query}", search)}"' for link in dicts])
-        subprocess.Popen(f'start chrome {chrome_arg} /new-window {dicts}', shell=True)
-        print()
-    else:
-        print("\nEmpty search query, skipping links.")
-
-    if 's' in options:
-        print("Saved search options.")
-        open(f'{HOMEPATH}/.opts', 'w').write("".join([option[0] for option in OPTIONS if option[0] in options]))
 
 if __name__ == "__main__":
     main()
