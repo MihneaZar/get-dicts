@@ -1,7 +1,7 @@
 # Menu Version
 
 ## Description
-Menu for choosing online dictionaries and opening them with a search query.
+Menu for choosing online dictionaries to look up words and phrases (through the Google Chrome console command).
 
 ## Requirements 
 - The [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) for the MenuInterface class;
