@@ -1,9 +1,9 @@
 # These are the default dictionary entries, which also serve as an example.
-# For dictionaries themselves, add them as a list of entries (even if it's only one).
+# For the dictionaries themselves, add them as a list of entries (even if it's only one).
 # Add the '{query}' where the search words go (try searching something and see where it is in the link).
-# For Chrome-specific arguments, simply add them as {name: argument}.
+# For Chrome-specific arguments, simply add them as '{name}: "{argument}"'.
 # This is the entire list of Chrome options: https://peter.sh/experiments/chromium-command-line-switches/.
-# Add '_' to the beginning of an entry name to ignore it without having to completely remove it. 
+# Entries with '_' at the beginning of their name are ignored by the program, so they can be removed without being deleted. 
 
 _example:
     - "This entry will be ignored, because of the '_' at the beginning."

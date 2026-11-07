@@ -60,6 +60,7 @@ def main():
         subprocess.Popen(f'start chrome {chrome_arg} {dicts}', shell=True)
         
         return
+    # command-line search end
 
     os.system('title Dictionaries')
 
