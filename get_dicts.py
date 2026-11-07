@@ -32,21 +32,19 @@ def main():
             moveCursor(max(int(os.get_terminal_size()[1] / 2) - 4, 0), 0)
         
         full_options = yaml.safe_load(open(f"{HOMEPATH}/options.yaml"))
-        selected_options = json.load(open(f"{DATAPATH}/selected.json"))
+        # selected dictionary entry and chrome arguments
+        selected = json.load(open(f"{DATAPATH}/selected.json"))
+        selected_dict = selected["dict"]
+        selected_args = selected["args"]
         
-        dicts = []
+        dicts = full_options[selected_dict]
         args  = []
-
-        # respecting order from HOMEPATH/options.yaml
-        for option in [option for option in full_options if option in selected_options]:
-            if isinstance(full_options[option], list):
-                dicts += full_options[option]
-            else:
-                args.append(full_options[option])
+        for arg in selected_args:
+            args.append(full_options[arg])
 
         if not clear:
             print()
-        print(f'{colored("Selected options", "light_blue")}: {", ".join([option for option in full_options if option in selected_options])}.\n')
+        print(f'{colored("Selected dictionary", "light_blue")}: {selected_dict}.\n{colored("Selected arguments", "light_blue")}: {", ".join([arg for arg in full_options if arg in selected_args])}.\n')
         search = input(f'{colored("Search for", "light_blue")}: ').replace(' ', '+')
         print()
 
@@ -66,15 +64,28 @@ def main():
 
     menu_structure = yaml.safe_load(open(f"{DATAPATH}/main_menu.yaml"))
 
+    # full options.yaml (python dict with the dictionary links and the actual chrome args)
     full_options = yaml.safe_load(open(f"{HOMEPATH}/options.yaml"))
-    options = [option for option in full_options if option and option[0] != '_']
-    selected_options = json.load(open(f"{DATAPATH}/selected.json"))
+    # getting option names in the order of options.yaml
+    options = [option for option in full_options if option and option[0] != '_' and full_options[option]]
+
+    # list of all dict entries
+    all_dicts = [dict for dict in options if isinstance(full_options[dict], list)]
+
+    # list of all arg entries
+    all_args = [arg for arg in options if isinstance(full_options[arg], str)]
+
+    # selected dictionary entry and chrome arguments
+    selected = json.load(open(f"{DATAPATH}/selected.json"))
+    selected_dict = selected["dict"]
+    selected_args = selected["args"]
 
     max_option = max([len(option) for option in options])
 
     option_dict = {}
     for option in options:
-        selected_text = f"{'x':>{max_option - len(option) + 2}}" if option in selected_options else ""
+        # + 2 for the " x" part
+        selected_text = f"{'x':>{max_option - len(option) + 2}}" if option in [selected_dict] + selected_args else ""
         option_dict[f"'{option}'{selected_text}"] = None
 
     exit_on_search = True
@@ -95,17 +106,15 @@ def main():
 
         if path == "Search":
             # search(links, args)
-            dicts = []
+            dicts = full_options[selected_dict]
             args  = []
-
-            # respecting order from HOMEPATH/options.yaml
-            for option in [option for option in full_options if option in selected_options]:
-                if isinstance(full_options[option], list):
-                    dicts += full_options[option]
-                else:
-                    args.append(full_options[option])
-
-            search = menu.separateInteraction(function=lambda: input(f'{colored("Selected options", "light_blue")}: {", ".join([option for option in full_options if option in selected_options])}.\n\n{colored("Search for", "light_blue")}: '), showCursor=True).replace(' ', '+')
+            for arg in selected_args:
+                args.append(full_options[arg])
+            
+            search_prompt  = f'{colored("Selected dictionary", "light_blue")}: {selected_dict}.\n'
+            search_prompt += f'{colored("Selected arguments", "light_blue")}: {", ".join([arg for arg in full_options if arg in selected_args])}.\n\n'''
+            search_prompt += f'{colored("Search for", "light_blue")}: '
+            search = menu.separateInteraction(function=lambda: input(search_prompt), showCursor=True).replace(' ', '+')
             chrome_arg = " ".join(args)
 
             if not search or search.isspace():
@@ -123,7 +132,7 @@ def main():
         
         if path == "Save selection":
             with open(f"{DATAPATH}/selected.json", 'w', encoding="utf-8") as file:
-                json.dump(selected_options, file, ensure_ascii=False, indent=4)
+                json.dump({"dict": selected_dict, "args": selected_args}, file, ensure_ascii=False, indent=4)
 
             menu.separateInteraction(message=colored("Selection saved.\n", "light_blue"), waitInsteadOfEnter=0.5)
             continue
@@ -132,14 +141,28 @@ def main():
         if path[0] == "'":
             new_option = path[1:path.find("'", 1)]
 
-            changes = MenuInterface.selectMultipleOptions([f"'{option}'" for option in selected_options], f"'{new_option}'", [f"'{option}'" for option in options], 'x')
-            
-            # selecting option
-            if new_option not in selected_options:
-                selected_options.append(new_option)
-            # deselecting option
-            else:
-                selected_options.remove(new_option)
+            # reselecting the same dictionary is ignored
+            if new_option == selected_dict:
+                continue
+
+            if new_option in all_dicts and new_option != selected_dict: 
+                # single option for dicts (only one dict can be selected at a time)
+                changes = MenuInterface.selectOption(f"'{selected_dict}'", f"'{new_option}'", [f"'{dict}'" for dict in all_dicts], 
+                                                     'x', maxOptionLength=max_option+2) # + 2 for the quotes ''
+
+                selected_dict = new_option
+
+            if new_option in all_args:
+                # multiple options for args (multiple args can be selected at the same time)
+                changes = MenuInterface.selectMultipleOptions([f"'{arg}'" for arg in selected_args], f"'{new_option}'", 
+                                                              [f"'{arg}'" for arg in all_args], 'x', maxOptionLength=max_option+2) # + 2 for the quotes ''
+
+                # selecting option
+                if new_option not in selected_args:
+                    selected_args.append(new_option)
+                # deselecting option
+                else:
+                    selected_args.remove(new_option)
 
             menu.changeOptionNames([], changes)
             continue

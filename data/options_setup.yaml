@@ -1,8 +1,9 @@
 # These are the default dictionary entries, which also serve as an example.
 # For the dictionaries themselves, add them as a list of entries (even if it's only one).
 # Add the '{query}' where the search words go (try searching something and see where it is in the link).
-# For Chrome-specific arguments, simply add them as '{name}: "{argument}"'.
-# This is the entire list of Chrome options: https://peter.sh/experiments/chromium-command-line-switches/.
+# For Chrome command-line arguments, simply add them as '{name}: "{argument}"' 
+# Multiple arguments can be typed on the same line, separated by space.
+# This is the entire list of Chrome arguments: https://peter.sh/experiments/chromium-command-line-switches/.
 # Entries with '_' at the beginning of their name are ignored by the program, so they can be removed without being deleted. 
 
 _example:
